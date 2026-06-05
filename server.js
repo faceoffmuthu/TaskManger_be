@@ -12,27 +12,22 @@ const reportRoutes = require('./routes/reportRoutes');
 const app = express();
 
 // Middleware to handle CORS
-const allowedOrigins = [
-  "http://localhost:5173",
-  "http://localhost:5174",
-  "https://your-frontend.vercel.app",
-];
-
 app.use(
   cors({
-    origin: function (origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
+    origin: true,
     credentials: true,
   })
 );
 
 // Database Connection
 connectDB();
+
+const cloudinary = require("./utils/cloudinary");
+
+console.log("Cloudinary Name:", process.env.CLOUDINARY_CLOUD_NAME);
+console.log("API Key Exists:", !!process.env.CLOUDINARY_API_KEY);
+console.log("API Secret Exists:", !!process.env.CLOUDINARY_API_SECRET);
+console.log("Cloudinary Loaded:", !!cloudinary);
 
 // Middleware
 app.use(express.json())

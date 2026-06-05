@@ -11,29 +11,32 @@ router.post("/login",loginUser); // Login User
 router.get("/profile",protect, getUserProfile); // Get user profile
 router.put("/profile",protect, updateUserProfile); // Update user profile
 
-router.post("/upload-image", upload.single("image"), (req, res) => {
-    try {
-        console.log("FILE:", req.file);
+router.post("/upload-image", (req, res) => {
+  upload.single("image")(req, res, (err) => {
 
-        if (!req.file) {
-            return res.status(400).json({
-                message: "No file uploaded"
-            });
-        }
+    if (err) {
+      console.error("MULTER ERROR:", err);
 
-        res.status(200).json({
-            imageUrl: req.file.path
-        });
-
-    } catch (error) {
-
-        console.error("UPLOAD ERROR:", JSON.stringify(error, null, 2));
-        console.error(error);
-
-        res.status(500).json({
-            message: error.message
-        });
+      return res.status(500).json({
+        success: false,
+        error: err.message,
+      });
     }
+
+    console.log("FILE:", req.file);
+
+    if (!req.file) {
+      return res.status(400).json({
+        success: false,
+        message: "No file uploaded",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      imageUrl: req.file.path,
+    });
+  });
 });
 
 module.exports = router;
