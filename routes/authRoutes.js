@@ -13,6 +13,8 @@ router.put("/profile",protect, updateUserProfile); // Update user profile
 
 router.post("/upload-image", upload.single("image"), (req, res) => {
     try {
+        console.log("FILE:", req.file);
+
         if (!req.file) {
             return res.status(400).json({
                 message: "No file uploaded"
@@ -22,7 +24,12 @@ router.post("/upload-image", upload.single("image"), (req, res) => {
         res.status(200).json({
             imageUrl: req.file.path
         });
+
     } catch (error) {
+
+        console.error("UPLOAD ERROR:", JSON.stringify(error, null, 2));
+        console.error(error);
+
         res.status(500).json({
             message: error.message
         });

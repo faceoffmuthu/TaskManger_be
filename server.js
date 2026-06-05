@@ -56,6 +56,13 @@ app.get("/test-env", (req, res) => {
 // Serve uploads folder
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
+process.on("unhandledRejection", (reason) => {
+    console.error("UNHANDLED REJECTION:", reason);
+});
+
+process.on("uncaughtException", (err) => {
+    console.error("UNCAUGHT EXCEPTION:", err);
+});
 
 // Start Server
 const PORT = process.env.PORT || 5000;
