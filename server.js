@@ -44,6 +44,14 @@ app.use('/api/users', userRoutes);
 app.use('/api/tasks', taskRoutes);
 app.use('/api/reports', reportRoutes);
 
+app.get("/test-env", (req, res) => {
+  res.json({
+    cloudName: process.env.CLOUDINARY_CLOUD_NAME,
+    apiKeyExists: !!process.env.CLOUDINARY_API_KEY,
+    apiSecretExists: !!process.env.CLOUDINARY_API_SECRET,
+  });
+});
+
 
 // Serve uploads folder
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
